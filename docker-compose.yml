@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kohuser
+      POSTGRES_PASSWORD: kohpass
+      POSTGRES_DB: king_of_history
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kohuser -d king_of_history"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://kohuser:kohpass@db:5432/king_of_history
+      NODE_ENV: development
+      PORT: 4000
+      MAX_ATTEMPTS: 5
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./packages/backend:/app/packages/backend
+      - ./packages/shared:/app/packages/shared
+      - backend_node_modules:/app/packages/backend/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:4000/api
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./packages/frontend:/app/packages/frontend
+      - ./packages/shared:/app/packages/shared
+      - frontend_node_modules:/app/packages/frontend/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
+  backend_node_modules:
+  frontend_node_modules:
+

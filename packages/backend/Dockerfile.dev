@@ -1,0 +1,15 @@
+FROM node:20-alpine
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@9 --activate
+
+COPY pnpm-workspace.yaml package.json tsconfig.base.json ./
+COPY packages/shared/package.json packages/shared/package.json
+COPY packages/backend/package.json packages/backend/package.json
+
+RUN pnpm install --no-frozen-lockfile
+
+# 源码通过 docker-compose 的 volume 挂载进来，这里不 COPY src，
+# 保证开发时改代码无需重新 build image。
+EXPOSE 4000
+CMD ["pnpm", "--filter", "@king-of-history/backend", "dev"]
+

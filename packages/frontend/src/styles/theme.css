@@ -1,0 +1,255 @@
+/* 战争风主题样式：暗色 + 烫金，力求还原竞技对决氛围。 */
+
+:root {
+  --color-bg: #08080c;
+  --color-panel: rgba(24, 22, 28, 0.88);
+  --color-panel-border: rgba(232, 194, 106, 0.35);
+  --color-gold: #e8c26a;
+  --color-gold-strong: #f5d78a;
+  --color-win: #6fcf6f;
+  --color-lose: #e0725f;
+  --color-draw: #d9c46a;
+}
+
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(232, 194, 106, 0.12), transparent 55%),
+    radial-gradient(circle at 8% 30%, rgba(74, 144, 217, 0.08), transparent 40%),
+    radial-gradient(circle at 92% 70%, rgba(217, 83, 79, 0.08), transparent 40%),
+    var(--color-bg);
+  padding: 28px 16px 40px;
+}
+
+.game-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  color: var(--color-gold-strong);
+  text-shadow:
+    0 0 10px rgba(232, 194, 106, 0.55),
+    0 0 2px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  letter-spacing: 2px;
+  margin: 4px 0 12px;
+  position: relative;
+}
+
+.game-header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-music-toggle {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-panel-border);
+  background: rgba(24, 22, 28, 0.7);
+  color: var(--color-gold-strong);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-music-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232, 194, 106, 0.35);
+}
+
+.game-title::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 3px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.45),
+    inset 0 0 24px rgba(232, 194, 106, 0.04);
+  backdrop-filter: blur(2px);
+}
+
+/* ---- 欢迎 / 结算 通用界面 ---- */
+.welcome-screen {
+  max-width: 640px;
+  text-align: center;
+  padding: 40px 28px;
+}
+
+.welcome-emblem {
+  font-size: 3rem;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 0 10px rgba(232, 194, 106, 0.5));
+}
+
+.welcome-screen p {
+  line-height: 1.9;
+  color: #cfcfd6;
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  color: #8d8d97;
+  margin-top: 18px;
+}
+
+.error-text {
+  color: var(--color-lose);
+  margin-top: 12px;
+}
+
+.primary-button {
+  background: linear-gradient(180deg, var(--color-gold-strong), #c99a3d);
+  color: #201a08;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-top: 24px;
+  box-shadow: 0 4px 14px rgba(232, 194, 106, 0.35);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(232, 194, 106, 0.5);
+}
+
+/* ---- 猜英雄界面 ---- */
+.guessing-panel {
+  width: 100%;
+  max-width: 640px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hint-panel-title {
+  text-align: center;
+  color: var(--color-gold);
+  font-weight: 700;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--color-panel-border);
+  letter-spacing: 1px;
+}
+
+.hint-panel-title .quota-low {
+  color: var(--color-lose);
+  font-weight: 800;
+}
+
+.hint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.hint-item {
+  line-height: 1.7;
+  color: #d8d8de;
+}
+
+.hint-item::marker {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.guess-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.guess-form input {
+  flex: 1;
+  min-width: 200px;
+  background: #101015;
+  border: 1px solid #454550;
+  border-radius: 8px;
+  color: #eee;
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
+.guess-form input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.guess-form .primary-button {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+/* ---- 结算界面 ---- */
+.result-screen {
+  max-width: 680px;
+  text-align: center;
+  padding: 40px 28px;
+}
+
+.result-banner {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 800;
+}
+
+.result-banner.outcome-win {
+  color: var(--color-win);
+}
+
+.result-banner.outcome-lose {
+  color: var(--color-lose);
+}
+
+.result-banner.outcome-draw {
+  color: var(--color-draw);
+}
+
+.hero-reveal-card {
+  padding: 20px;
+  text-align: left;
+  margin: 20px 0;
+}
+
+.hero-reveal-card h2 {
+  color: var(--color-gold);
+  margin-top: 0;
+}
+
+.hero-reveal-card p {
+  line-height: 1.8;
+  color: #d8d8de;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
