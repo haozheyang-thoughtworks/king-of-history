@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U kohuser -d king_of_history"]
       interval: 5s

@@ -1,0 +1,46 @@
+# 生产环境 compose：镜像统一从 GHCR 拉取，不挂载源码 volume。
+# 需要在部署目录（EC2 上为 /opt/king-of-history）下放置同目录的 .env 文件，
+# 包含：POSTGRES_USER、POSTGRES_PASSWORD、POSTGRES_DB、DATABASE_URL、
+#       MAX_ATTEMPTS、GHCR_OWNER、IMAGE_TAG（.env 不进 git）。
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # 不对外暴露端口，仅同一 compose 网络内被 backend 访问
+
+  backend:
+    image: ghcr.io/${GHCR_OWNER}/king-of-history-backend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: production
+      PORT: 4000
+      MAX_ATTEMPTS: ${MAX_ATTEMPTS:-5}
+    expose:
+      - "4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: ghcr.io/${GHCR_OWNER}/king-of-history-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
+
