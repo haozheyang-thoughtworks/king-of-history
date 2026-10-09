@@ -1,7 +1,7 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@9 --activate
-COPY pnpm-workspace.yaml package.json ./
+COPY pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/frontend packages/frontend
 RUN pnpm install --no-frozen-lockfile
