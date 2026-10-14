@@ -8,7 +8,7 @@
 
 ```
 packages/
-  shared/    # 前后端共享 TS 类型
+  shared/    # 前后端共享 TS 的类型
   backend/   # Node.js + TypeScript + Express(REST, MVC 分层) + TypeORM
   frontend/  # React + TypeScript + Vite（原生 fetch 调用 REST API）
 ```
